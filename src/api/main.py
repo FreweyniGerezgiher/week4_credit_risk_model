@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"message": "Credit Risk API"}
+    return {"message": "This is Credit Risk API"}

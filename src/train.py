@@ -38,7 +38,7 @@ def evaluate_model(model, X_test, y_test):
 
 def load_data():
     """
-    Load processed dataset.
+    Load the processed dataset.
     """
 
     df = pd.read_csv(
@@ -74,7 +74,7 @@ def train_logistic_regression(
     y_test
 ):
     """
-    Train and log Logistic Regression.
+    Train and log the Logistic Regression.
     """
 
     with mlflow.start_run(

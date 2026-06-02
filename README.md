@@ -1,66 +1,114 @@
-# # Credit Risk Probability Model for Alternative Data
+# Credit Risk Prediction Using Alternative Transaction Data
 
-## Project Overview
+## Project Description
 
-This project aims to build an end-to-end credit risk probability model using alternative transaction data from an eCommerce platform. The system is designed to help financial institutions estimate customer creditworthiness for buy-now-pay-later services when traditional credit history is unavailable.
+This project focuses on developing a complete credit risk prediction system using alternative transaction data collected from an eCommerce platform. The objective is to estimate the probability that a customer will default on credit obligations, particularly in situations where traditional credit history is unavailable.
 
-The project involves data preprocessing, feature engineering, proxy target variable creation, machine learning model development, API deployment, and MLOps practices such as experiment tracking and CI/CD automation.
+The solution covers the entire machine learning lifecycle, including data preparation, feature engineering, creation of a proxy target variable, model training and evaluation, API deployment, and MLOps practices such as experiment tracking, automated testing, and continuous integration/continuous deployment (CI/CD).
 
-## Project Structure
+## Repository Organization
 
-* `data/` → stores raw and processed datasets
-* `notebooks/` → contains exploratory data analysis notebooks
-* `src/` → source code for preprocessing, training, prediction, and API services
-* `tests/` → unit testing files
-* `.github/workflows/` → CI/CD automation workflows
-* `Dockerfile` and `docker-compose.yml` → containerization setup
+* **data/** – Contains raw datasets and processed data files.
+* **notebooks/** – Includes exploratory data analysis (EDA) notebooks and research work.
+* **src/** – Holds source code for preprocessing, feature engineering, model training, prediction, and API services.
+* **tests/** – Stores unit and integration tests.
+* **.github/workflows/** – Contains CI/CD workflow configurations.
+* **Dockerfile** and **docker-compose.yml** – Define the containerization and deployment environment.
 
+---
 
+# Business Understanding of Credit Scoring
 
-## Credit Scoring Business Understanding
+## 1. Basel II Requirements and Model Explainability
 
-### 1. Basel II and the Need for Interpretable Models
+The Basel II framework highlights the importance of sound risk management, transparency, and regulatory compliance within financial institutions. Since credit scoring models directly influence lending decisions, organizations must be able to explain how risk assessments are generated.
 
-The Basel II Accord emphasizes proper risk measurement, transparency, and regulatory compliance in financial systems. Because credit scoring models influence important financial decisions such as loan approvals and credit limits, banks must be able to explain how predictions are made.
+An interpretable model enables financial institutions to justify credit decisions, perform effective model monitoring, and satisfy regulatory audit requirements. Transparency is especially important because regulators, business stakeholders, and customers may require insight into the factors influencing credit risk predictions.
 
-An interpretable and well-documented model allows financial institutions to justify lending decisions, monitor model behavior, and comply with regulatory auditing requirements. In regulated environments, transparency is critical because stakeholders need to understand which factors contribute to customer risk predictions.
+For this reason, financial institutions often favor simpler and more interpretable models, even when more complex algorithms may provide marginally higher predictive accuracy.
 
-Therefore, simpler and explainable models are often preferred in financial contexts, even if more complex models may sometimes provide slightly better predictive performance.
+## 2. Use of Proxy Variables and Associated Business Risks
 
+The available dataset does not contain a direct indicator of loan default. Because supervised learning techniques require labeled outcomes, a proxy target variable must be constructed to approximate customer credit behavior.
 
-### 2. Proxy Variables and Business Risks
+In this project, customer activity patterns derived from Recency, Frequency, and Monetary (RFM) metrics are used to identify potential high-risk and low-risk customer segments. These generated labels serve as a substitute for actual default information during model training.
 
-The dataset used in this project does not contain a direct loan default label. Since supervised machine learning models require target labels for training, a proxy variable must be created to estimate customer credit risk behavior.
+However, relying on proxy targets introduces uncertainty. The generated labels may not accurately reflect real repayment behavior, which can result in classification errors. Such inaccuracies may cause trustworthy customers to be denied credit or high-risk customers to receive approval, potentially affecting profitability, customer satisfaction, and fairness in lending practices.
 
-In this project, behavioral patterns such as Recency, Frequency, and Monetary (RFM) activity can be used to categorize customers into potential high-risk and low-risk groups. This proxy target acts as an estimated representation of default behavior.
+## 3. Balancing Explainability and Predictive Performance
 
-However, proxy-based prediction introduces business risks because the generated labels may not perfectly represent actual loan repayment outcomes. Incorrect proxy labels may lead to rejecting reliable customers or approving risky customers, which can negatively affect customer trust, profitability, and fairness in lending decisions.
+A key challenge in credit risk modeling is finding the right balance between model interpretability and predictive power.
 
+Traditional approaches, such as Logistic Regression combined with Weight of Evidence (WoE) encoding, provide a high degree of transparency. These models are easier to explain, validate, and document, making them well-suited for regulated financial environments.
 
-### 3. Trade-offs Between Interpretable and High-Performance Models
+Conversely, advanced machine learning techniques such as Gradient Boosting and XGBoost can capture complex relationships within customer behavior data and often deliver superior predictive performance. Despite their effectiveness, these models are generally less transparent and may present challenges when explaining decisions to regulators and stakeholders.
 
-In regulated financial systems, there is an important trade-off between model interpretability and predictive performance.
+Selecting the most appropriate model therefore requires careful consideration of regulatory requirements, business objectives, model transparency, fairness, and predictive accuracy.
 
-Interpretable models such as Logistic Regression combined with Weight of Evidence (WoE) transformations are easier to explain, validate, and document. These models are preferred in many banking environments because regulators and business stakeholders can clearly understand the reasoning behind predictions.
+---
 
-On the other hand, high-performance models such as Gradient Boosting or XGBoost can capture more complex behavioral patterns and often achieve better predictive accuracy. However, these models are generally more difficult to interpret and may reduce transparency in decision-making.
+# Dataset Information
 
-Choosing the appropriate model therefore requires balancing regulatory compliance, explainability, fairness, and predictive performance based on the business context.
-## Dataset
+The dataset used in this project is sourced from the **Xente Challenge**, a Kaggle competition focused on financial inclusion and credit risk assessment.
 
-The dataset used in this project originates from the **Xente Challenge** (Kaggle competition). It can be downloaded from:
+Dataset URL:
 
 https://www.kaggle.com/competitions/xente-challenge/data
 
-**Instructions:**
-1. Sign in to Kaggle (create a free account if needed).
-2. Accept the competition rules.
-3. Download the `transactions.csv` (or provided zip) and place it in the `data/raw/` directory.
-4. Run the preprocessing script `src/preprocess.py` to generate processed files in `data/processed/`.
+## Getting Started
 
-## Project Conventions
+1. Create or sign in to your Kaggle account.
+2. Accept the competition terms and conditions.
+3. Download the dataset files, including `transactions.csv`.
+4. Place the downloaded files in the `data/raw/` directory.
+5. Execute the preprocessing script located at `src/preprocess.py`.
+6. The processed datasets will be generated automatically in the `data/processed/` directory.
 
-- **Branching:** Use `main` for stable releases. Feature work should be done on `feature/<name>` branches and merged via pull requests.
-- **Coding style:** Follow PEP 8, run `flake8` and `black` before committing. Type hints are encouraged.
-- **Commit messages:** Follow the conventional commits spec (`type(scope): description`).
-- **Testing:** Add unit tests in `tests/` and ensure `pytest` passes locally before CI.
+---
+
+# Development Guidelines
+
+## Branching Strategy
+
+* The **main** branch should always contain stable and production-ready code.
+* New features and enhancements should be developed in dedicated branches following the format:
+
+```text
+feature/<feature-name>
+```
+
+* Changes should be integrated into the main branch through pull requests and code reviews.
+
+## Code Quality Standards
+
+* Follow the **PEP 8** Python style guide.
+* Format code using **Black**.
+* Perform static analysis with **Flake8** before committing changes.
+* Use type annotations wherever appropriate to improve code readability and maintainability.
+
+## Commit Message Convention
+
+Adopt the Conventional Commits specification:
+
+```text
+type(scope): short description
+```
+
+Examples:
+
+```text
+feat(model): add xgboost training pipeline
+fix(api): handle missing customer inputs
+docs(readme): update project setup instructions
+```
+
+## Testing Requirements
+
+* Add all tests under the `tests/` directory.
+* Ensure that all unit and integration tests pass successfully using:
+
+```bash
+pytest
+```
+
+* Verify test results locally before pushing code or creating a pull request.
